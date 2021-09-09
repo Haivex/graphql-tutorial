@@ -12,6 +12,7 @@ const {
 //schema how to looks
 // obj type how returned object looks => HelloWorld Object with field message
 //message has type string and resolve (return) given string
+//fields must be functions!
 
 // in localhost page write: query {message}
 //resolve can have arguments: parent and args
@@ -101,41 +102,8 @@ const RootQueryType = new GraphQLObjectType({
   }),
 });
 
-const RootMutationType = new GraphQLObjectType({
-  name: 'Mutation',
-  description: 'Root Mutation',
-  fields: () => ({
-    addBook: {
-      type: BookType,
-      description: 'Add a book',
-      args: {
-        name: { type: GraphQLNonNull(GraphQLString) },
-        authorId: { type: GraphQLNonNull(GraphQLInt) },
-      },
-      resolve: (parent, args) => {
-        const book = {id: books.length + 1, name: args.name, authorId: args.authorId}
-        books.push(book);
-        return book;
-      }
-    },
-    addAuthor: {
-      type: AuthorType,
-      description: 'Add an author',
-      args: {
-        name: { type: GraphQLNonNull(GraphQLString) },
-      },
-      resolve: (parent, args) => {
-        const author = {id: authors.length + 1, name: args.name}
-        authors.push(author);
-        return author;
-      }
-    },
-  }),
-});
-
 const schema = new GraphQLSchema({
   query: RootQueryType,
-  mutation: RootMutationType,
 });
 
 const app = express();
